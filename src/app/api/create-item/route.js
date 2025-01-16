@@ -22,11 +22,11 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-
+    const decimalPrice = mongoose.Types.Decimal128.fromString(price.toFixed(2));
     // Create a new stock inventory document
     const stockInventory = new StockInventory({
       name,
-      price,
+      price: decimalPrice,
       stockQty,
       availability: availability ?? true, // Use default if not provided
     });
