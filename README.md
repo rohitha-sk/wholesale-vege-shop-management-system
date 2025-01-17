@@ -24,3 +24,7 @@ warning alert before record deletion
 
 success alert after deletion.
 ![image](https://github.com/user-attachments/assets/52d1326d-ba03-4b11-acd6-67fc5c5a3faf)
+
+mongodb document view
+![image](https://github.com/user-attachments/assets/afd14784-770a-4144-8f1e-f5d553f3a44b)
+
