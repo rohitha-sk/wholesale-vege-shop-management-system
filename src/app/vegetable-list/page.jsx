@@ -6,6 +6,7 @@ import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import { useEffect, useState } from "react";
 import Swal from 'sweetalert2';
 
+
 function page() {
   const [stockData, setStockData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +63,7 @@ function page() {
   }, []);
 
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (itemId) => {
     const confirmation = await Swal.fire({
       title: 'Are you sure?',
       text: 'Do you really want to delete this item?',
@@ -75,14 +76,14 @@ function page() {
 
     if (confirmation.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/api/delete-item/${id}`, {
+        const response = await fetch(`http://localhost:3000/api/delete-item/${itemId}`, {
           method: 'DELETE',
         });
 
         if (response.ok) {
           Swal.fire('Deleted!', 'The item has been deleted.', 'success');
           // Refresh the table data
-          setStockData(stockData.filter(item => item._id !== id));
+          setStockData(stockData.filter(item => item.itemId !== itemId));
         } else {
           const data = await response.json();
           Swal.fire('Error!', data.error || 'Failed to delete item.', 'error');
@@ -119,6 +120,7 @@ function page() {
           Add New Item
         </Link>
 
+        <br />
         {/* Table */}
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-gray-100">
@@ -152,8 +154,8 @@ function page() {
               </tr>
             ) : stockData.length > 0 ? (
               stockData.map((item) => (
-                <tr key={item._id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border text-sm">{item._id}</td>
+                <tr key={item.itemId} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 border text-sm">{item.itemId}</td>
                   <td className="px-4 py-2 border text-sm">{item.name}</td>
                   <td className="px-4 py-2 border text-sm">
                     {isNaN(item.price) ? 'Invalid Price' : item.price.toFixed(2)} {/* Handle invalid price */}
@@ -167,13 +169,13 @@ function page() {
                   <td className="px-4 py-2 border text-sm">
                     <div className="flex space-x-2">
                       <Link
-                        href={`/edit-vege-form/${item._id}`}
+                        href={`/edit-vege-form/${item.itemId}`}
                         className="inline-flex items-center px-3 py-2 bg-blue-500 text-white font-medium text-sm rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition"
                       >
                         <AiOutlineEdit className="mr-1" />
                       </Link>
                       <button
-                       onClick={() => handleDelete(item._id)}
+                       onClick={() => handleDelete(item.itemId)}
                         className="inline-flex items-center px-3 py-2 bg-red-500 text-white font-medium text-sm rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 transition"
                       >
                         <AiOutlineDelete className="mr-1" />

@@ -19,14 +19,14 @@ export default function Home() {
       <div className="flex flex-col justify-center items-center h-full gap-8">
       <h1 className="text-4xl sm:text-5xl md:text-4xl font-extrabold text-white p-4 rounded-md bg-opacity-70 backdrop-blur-md flex flex-col items-center">
   <span>Vegetable Shop</span>
-  <span className="block">Management system</span>
+  <span className="block">Inventory Management</span>
 </h1>
 
 
         
         {/* Blue Button */}
         <Link href="/vegetable-list" className="px-6 py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-all">
-          Check Today's Stock
+          Check the Inventory
         </Link>
       </div>
 

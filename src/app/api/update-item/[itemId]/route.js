@@ -1,13 +1,12 @@
 import clientPromise from '@/app/lib/mongodb';
-import { ObjectId } from 'mongodb'; // Ensure ObjectId is imported
 
 export async function PATCH(req, context) {
   try {
-    // Await `params` to safely extract `id`
-    const { id } = await context.params; // Use 'id' since the route parameter is 'id'
+    // Await `params` to safely extract `itemId`
+    const { itemId } = context.params;
 
-    // Ensure the id is a valid ObjectId
-    if (!ObjectId.isValid(id)) {
+    // Ensure itemId is a valid number
+    if (!itemId || isNaN(Number(itemId))) {
       return new Response(
         JSON.stringify({ error: 'Invalid item ID format' }),
         { status: 400 }
@@ -37,14 +36,17 @@ export async function PATCH(req, context) {
       );
     }
 
+    // Convert itemId to a number for querying
+    const numericItemId = Number(itemId);
+
     // Connect to the database
     const client = await clientPromise;
     const db = client.db();
     const collection = db.collection('stockinventories');
 
-    // Update the document by ID
+    // Update the document by itemId
     const result = await collection.updateOne(
-      { _id: new ObjectId(id) },
+      { itemId: numericItemId },
       { $set: updateData }
     );
 

@@ -1,26 +1,28 @@
 import clientPromise from '@/app/lib/mongodb';
-import { ObjectId } from 'mongodb';
 
 export async function DELETE(req, { params }) {
   try {
-    // Extract the id from the params object
-    const { id } = await params;
+    // Extract the itemId from the params object
+    const { itemId } = params;
 
-    // Ensure valid ObjectId format
-    if (!ObjectId.isValid(id)) {
+    // Ensure itemId is a valid number
+    if (!itemId || isNaN(Number(itemId))) {
       return new Response(
         JSON.stringify({ error: 'Invalid item ID format' }),
         { status: 400 }
       );
     }
 
+    // Convert itemId to a number for querying
+    const numericItemId = Number(itemId);
+
     // Connect to the database
     const client = await clientPromise;
     const db = client.db();
     const collection = db.collection('stockinventories'); // Use your actual collection name
 
-    // Delete the item from the database
-    const deleteResult = await collection.deleteOne({ _id: new ObjectId(id) });
+    // Delete the item from the database by itemId
+    const deleteResult = await collection.deleteOne({ itemId: numericItemId });
 
     // If no document was deleted
     if (deleteResult.deletedCount === 0) {

@@ -16,21 +16,23 @@ function Page({ params }) {
   const [error, setError] = useState(null);
 
   const router = useRouter();
-  const { id } = React.use(params);
+  const { itemId } = React.use(params);
 
   useEffect(() => {
     const fetchItemData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/get-item/${id}`);
+        const response = await fetch(`http://localhost:3000/api/get-item/${itemId}`);
         const data = await response.json();
 
-        if (data && data._id) {
-          // Ensure price is a number
-          const price = data.price?.$numberDecimal ? parseFloat(data.price.$numberDecimal) : data.price;
+        if (data && data.itemId) {
+          const price =
+          data.price?.$numberDecimal !== undefined
+            ? parseFloat(data.price.$numberDecimal).toFixed(2)
+            : parseFloat(data.price).toFixed(2);
 
           setItemData({
             name: data.name,
-            price: price || '', // Set price to empty string if undefined or NaN
+            price: price, 
             stockQty: data.stockQty,
             availability: data.availability ? 'available' : 'unavailable',
           });
@@ -41,7 +43,7 @@ function Page({ params }) {
     };
 
     fetchItemData();
-  }, [id]);
+  }, [itemId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +59,7 @@ function Page({ params }) {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/update-item/${id}`, {
+      const response = await fetch(`http://localhost:3000/api/update-item/${itemId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
